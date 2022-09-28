@@ -1,0 +1,90 @@
+<html>
+<head>
+    <title>Angular JS Views</title>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
+    <style>
+            table, th , td {
+               border: 1px solid grey;
+               border-collapse: collapse;
+               padding: 5px;
+            }
+
+            table tr:nth-child(odd) {
+               background-color: #f2f2f2;
+            }
+
+            table tr:nth-child(even) {
+               background-color: #ffffff;
+            }
+         </style>
+</head>
+<body>
+<h2>Process Definitions</h2>
+<div ng-app = "mainApp" ng-controller="processListController">
+    <table>
+        <tr>
+            <th>Key</th>
+            <th>Name</th>
+            <th>Version</th>
+            <th>DeploymentID</th>
+            <th>Action</th>
+
+        </tr>
+
+        <tr ng-repeat = "process in processList">
+            <td>{{ process.key }}</td>
+            <td>{{ process.name }}</td>
+            <td>{{ process.version }}</td>
+            <td>{{ process.deploymentId }}</td>
+            <td><a href="#startProcess?key={{process.key}}">Start</a></td>
+        </tr>
+
+
+    </table>
+
+
+    <div ng-view></div>
+    <script type = "text/ng-template" id = "startProcess.htm">
+        <h2> Started Process </h2>
+        {{message}}
+    </script>
+    <div ng-view id="viewFlowDiagram"></div>
+</div>
+
+<script>
+        var mainApp = angular.module("mainApp", ['ngRoute']);
+
+        mainApp.config(['$routeProvider', function($routeProvider) {
+            $routeProvider
+            .when('/startProcess', {
+                templateUrl: 'startProcess.htm',
+                controller: 'StartProcessController'
+            })
+            .otherwise({redirectTo:'/'});
+
+        }]);
+
+        mainApp.controller("StartProcessController", function($scope, $location, $http) {
+            key = $location.search().key;
+            console.log(key);
+            data = "{\"variables\": {}}";
+			thisUrl = "/engine-rest/process-definition/key/"+key+"/start";
+			$http.post(thisUrl,data).success( function(response) {
+     			$scope.message = "Started the process "+ key +" with process Id: "+response.id;
+			    document.getElementById("viewFlowDiagram").innerHTML ="<p> <a target=\"_blank\" href=\"/camunda/app/cockpit/default/#/process-instance/"+response.id+"/runtime\">View the Process Flow Diagram</a> </p>";
+   			});
+        });
+
+        mainApp.controller('processListController', function($scope, $http) {
+          	var url = "/engine-rest/process-definition";
+ 		    $http.get(url).success( function(response) {
+     		    $scope.processList = response;
+   		    });
+        });
+
+
+      </script>
+
+</body>
+</html>

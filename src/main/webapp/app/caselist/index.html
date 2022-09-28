@@ -1,0 +1,118 @@
+<html>
+<head>
+    <title>Leidos Case Management</title>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+    <style>
+         table, th , td {
+            border: 1px solid grey;
+            border-collapse: collapse;
+            padding: 5px;
+         }
+
+         table tr:nth-child(odd) {
+            background-color: #f2f2f2;
+         }
+
+         table tr:nth-child(even) {
+            background-color: #ffffff;
+         }
+      </style>
+</head>
+
+<body>
+<h2>Leidos Case Management</h2>
+<div ng-app = "mainApp" ng-controller = "studentController">
+
+    <table border = "0">
+        <tr>
+            <td>Enter first name:</td>
+            <td><input type = "text" ng-model = "student.firstName"></td>
+        </tr>
+        <tr>
+            <td>Enter last name: </td>
+            <td>
+                <input type = "text" ng-model = "student.lastName">
+            </td>
+        </tr>
+        <tr>
+            <td>Name: </td>
+            <td>{{student.fullName()}}</td>
+        </tr>
+        <tr>
+            <td>Enter subject: </td>
+            <td><input type = "text" ng-model = "subjectName"></td>
+        </tr>
+        <tr>
+            <td>Marks by Subject</td>
+            <td>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Marks</th>
+                    </tr>
+                    <tr ng-repeat = "subject in student.subjects | filter: subjectName">
+                        <td>{{ subject.name }}</td>
+                        <td>{{ subject.marks }}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table border = "0">
+        <tr>
+            <td><input type = "checkbox" ng-model = "enableDisableButton">Disable Button</td>
+            <td><button ng-disabled = "enableDisableButton">Click Me!</button></td>
+        </tr>
+
+        <tr>
+            <td><input type = "checkbox" ng-model = "showHide1">Show Button</td>
+            <td><button ng-show = "showHide1">Click Me!</button></td>
+        </tr>
+
+        <tr>
+            <td><input type = "checkbox" ng-model = "showHide2">Hide Button</td>
+            <td><button ng-hide = "showHide2">Click Me!</button></td>
+        </tr>
+
+        <tr>
+            <td><p>Total click: {{ clickCounter }}</p></td>
+            <td><button ng-click = "clickCounter = clickCounter + 1">Click Me!</button></td>
+        </tr>
+    </table>
+</div>
+
+<script>
+	 var secondApp = angular.module("secondApp",[]);
+     secondApp.controller('testController',function($scope) {
+		$scope.clickCounter=0;
+	 });
+
+     var mainApp = angular.module("mainApp", []);
+     mainApp.controller('studentController',
+        function($scope) {
+	    $scope.clickCounter=0;
+            $scope.student = {
+               firstName: "Mahesh",
+               lastName: "Parashar",
+               fees:500,
+
+               subjects:[
+                  {name:'Physics',marks:70},
+                  {name:'Chemistry',marks:80},
+                  {name:'Math',marks:65},
+                  {name:'English',marks:75},
+                  {name:'Hindi',marks:67}
+               ],
+
+               fullName: function() {
+                  var studentObject;
+                  studentObject = $scope.student;
+                  return studentObject.firstName + " " + studentObject.lastName;
+               }
+            };
+        }
+     );
+</script>
+</body>
+</html>

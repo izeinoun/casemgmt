@@ -1,0 +1,1 @@
+copy target\camunda.war c:\users\zeinouni\camunda-bpm-tomcat-7.17.0\server\apache-tomcat-9.0.58\webapps /y

@@ -1,0 +1,34 @@
+<div class="three-cols-layout-columns"
+     ng-controller="camLayoutCtrl">
+
+  <!-- # list column -->
+  <section class="column column-center tasks-list"
+           ng-controller="camListCtrl">
+    <header class="three-cols-layout-cell top">
+
+      <button ng-click="toggleRegion($event)"
+              data-region="list"
+              class="region-toggle btn btn-link">
+        <span class="glyphicon"></span>
+      </button>
+    </header>
+
+  </section>
+  <!-- / list column -->
+  <!-- # task column -->
+  <section class="column column-right task-details"
+           ng-controller="camTaskActionCtrl">
+    <header class="three-cols-layout-cell top">
+      <button ng-click="toggleRegion($event)"
+              data-region="task"
+              class="region-toggle btn btn-link">
+        <span class="glyphicon"></span>
+      </button>
+    </header>
+
+    <div class="three-cols-layout-cell content"> Case List Here
+    </div>
+  </section>
+  <!-- # task column -->
+
+</div>
